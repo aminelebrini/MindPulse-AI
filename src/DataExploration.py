@@ -103,6 +103,22 @@ class DataExploration:
         plt.tight_layout()
         plt.show()
 
+        df_numeric = df_numeric.columns
+
+        plt.figure(figsize=(10, 5))
+
+        sns.boxplot(
+            data=self.data[df_numeric],
+            orient='v',
+            palette='Set3',
+        )
+        plt.xticks(fontsize=10)
+        plt.yticks(fontsize=10)
+        plt.title('Boxplot of Numeric Features for Analysis outliers', fontsize=13, fontweight='bold')
+        plt.xlabel('Value')
+        plt.ylabel('Features')
+        plt.tight_layout()
+        plt.show()
 
 
         data_frame = self.data.copy()
