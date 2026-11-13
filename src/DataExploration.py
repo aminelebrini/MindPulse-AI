@@ -24,6 +24,7 @@ class DataExploration:
         print("\nDescriptive Statistics:")
         print(self.data.describe())
 
+
         plt.figure(figsize=(7, 4))
         sns.countplot(
             data=self.data,
@@ -152,5 +153,5 @@ class DataExploration:
         plt.tight_layout()
         plt.show()
 
-
+        print("\nEnd of visualisation and exploration of the data\n")
     
