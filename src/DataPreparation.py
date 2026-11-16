@@ -12,7 +12,10 @@ class DataPreparation:
 
         data_frame = pd.DataFrame(self.data)
 
-        x = self.data.drop(columns=['Mental_Health_Risk'])
+        x = self.data.drop(
+            columns=['Mental_Health_Risk', 'Student_ID'],
+            errors='ignore',
+        )
         y = self.data['Mental_Health_Risk']
         return x, y
 

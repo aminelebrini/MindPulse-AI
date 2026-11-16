@@ -12,6 +12,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 DATA_PATH = PROJECT_ROOT / "data" / "raw" / "student_mental_health.csv"
 MODEL_DIRECTORY = PROJECT_ROOT / "models" / "best_model"
 TARGET_COLUMN = "Mental_Health_Risk"
+IDENTIFIER_COLUMNS = {"Student_ID"}
 RISK_LABELS = {0: "Low", 1: "Medium", 2: "High"}
 
 
@@ -40,7 +41,11 @@ def render_prediction_page(data: pd.DataFrame, model) -> None:
 
     with st.form("prediction_form"):
         values = {}
-        columns = [column for column in data.columns if column != TARGET_COLUMN]
+        columns = [
+            column
+            for column in data.columns
+            if column not in {TARGET_COLUMN, *IDENTIFIER_COLUMNS}
+        ]
         for column in columns:
             series = data[column]
             if not is_numeric_dtype(series):
@@ -81,7 +86,10 @@ def render_model_page(data: pd.DataFrame, model) -> None:
     model_path = getattr(model, "_mindpulse_path", MODEL_DIRECTORY / "modèle")
     col1.metric("Modèle", model_path.stem)
     col2.metric("Observations d'entraînement", len(data))
-    col3.metric("Variables", len(data.columns) - 1)
+    col3.metric(
+        "Variables",
+        len(data.columns) - len(IDENTIFIER_COLUMNS) - 1,
+    )
 
     st.subheader("Pipeline")
     st.code(repr(model), language="text")
@@ -101,7 +109,15 @@ def render_model_page(data: pd.DataFrame, model) -> None:
         )
 
     st.subheader("Colonnes attendues")
-    st.dataframe(pd.DataFrame({"Colonne": data.columns}), hide_index=True)
+    expected_columns = [
+        column
+        for column in data.columns
+        if column not in {TARGET_COLUMN, *IDENTIFIER_COLUMNS}
+    ]
+    st.dataframe(
+        pd.DataFrame({"Colonne": expected_columns}),
+        hide_index=True,
+    )
 
 
 def main() -> None:

@@ -1,5 +1,6 @@
 import os
 import runpy
+import sys
 from datetime import datetime
 from pathlib import Path
 from airflow import DAG
@@ -14,6 +15,8 @@ def train_model() -> None:
     previous_directory = Path.cwd()
     try:
         os.chdir(ROOT)
+        if str(ROOT) not in sys.path:
+            sys.path.insert(0, str(ROOT))
         runpy.run_path(str(ROOT / "main.py"), run_name="__main__")
     finally:
         os.chdir(previous_directory)
