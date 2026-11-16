@@ -21,7 +21,7 @@ def train_model() -> None:
 
 with DAG(
     dag_id="mindpulseai_pipeline",
-    start_date=datetime(2026, 1, 1),
+    start_date=datetime(2026, 11, 16),
     schedule="@weekly",
     catchup=False,
     tags=["mindpulse"],
